@@ -1,0 +1,174 @@
+.matrix{
+    background-color: transparent;
+    margin-top: 30px;
+    height: 415px;
+    width: 405px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    
+}
+
+.matrix:focus{
+    outline: none;
+}
+
+.row{
+    height: 42px;
+    width: 400px;
+    background-color: transparent;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    margin-bottom: 3px;
+    left: 2px;
+}
+.rowp{
+    height: 42px;
+    width: 400px;
+    background-color: transparent;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    margin-top: 4px;
+}
+.cell{
+    width: 40px;
+    height: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 22px;
+    background-color: rgb(161, 217, 214);
+    border-radius: 5px;
+    margin-left: 0px;
+    margin-right: 7px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none; /* Standard syntax */
+    
+}
+
+.cell:hover{
+    cursor: pointer;
+}
+.active{
+    outline: 1.5px solid BLUE;
+}
+
+.original{
+    background-color: rgb(9, 143, 167);
+}
+.update{
+    background-color: rgb(76, 182, 177);
+}
+
+.cube1{
+    width: 130px;
+    height: 138px;
+    position: absolute;
+    background-color: transparent;
+    
+    
+}
+.cube2{
+    width: 131px;
+    height: 141px;
+    position: absolute;
+    background-color: transparent;
+    border-left: 2px solid rgb(133, 132, 132);
+    border-right: 2px solid rgb(133, 132, 132);
+    top: 0px;
+    left: 131px;
+}
+.cube3{
+    width: 132px;
+    height: 138px;
+    position: absolute;
+    background-color: transparent;
+    left: 264px;
+}
+.cuberow1{
+    
+    position: absolute;
+    width: 397px;
+    height: 138px;
+    border-bottom: 2px solid rgb(133, 132, 132);
+    
+}
+.cuberow2{
+    position: absolute;
+    width: 397px;
+    height: 137px;
+    border-bottom: 2px solid rgb(133, 132, 132);
+    top: 229px;
+}
+.cuberow3{
+    position: absolute;
+    width: 397px;
+    height: 138px;
+    top: 365px;
+}
+
+.footer{
+    width: 400px;
+    height: 40px;
+    margin: 10px;
+    
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    position: relative;
+}
+.incorrect{
+    height: 35px;
+    width: 80px;
+    position: absolute;
+    right: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: larger;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: aliceblue;
+    background-color: rgb(198, 96, 96);
+}
+.score{
+    height: 35px;
+    width: 80px;
+    position: absolute;
+    left: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: larger;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: aliceblue;
+    background-color: rgb(35, 161, 35);
+}
+.output{
+    width: 150px;
+    height: 38px;
+    border-radius: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+}
+.correct{
+    background-color: green;
+}
+.wrong{
+    
+    background-color: rgb(196, 17, 17);
+}
