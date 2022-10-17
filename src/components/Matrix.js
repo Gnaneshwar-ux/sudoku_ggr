@@ -5,6 +5,7 @@ import generateSudoku from "./sudoku";
 import validate from "./validate";
 import Cuberow from "./cuberow";
 import Footer from "./Footer";
+import Numpad from "./Numpad";
 
 function game(fullsud) {
   var sud = new Array(9);
@@ -37,12 +38,7 @@ export default function Matrix() {
         setScore(sc);
       }
       setFooter(
-        <Footer
-          cls={"output correct"}
-          output={"correct"}
-          score={sc}
-          wrong={wr}
-        />
+        <Footer cls={"output correct"} output={"✓"} score={sc} wrong={wr} />
       );
     } else {
       if (isEnter) {
@@ -52,7 +48,7 @@ export default function Matrix() {
         setScore(sc);
       }
       setFooter(
-        <Footer cls={"output wrong"} output={"wrong"} score={sc} wrong={wr} />
+        <Footer cls={"output wrong"} output={"X"} score={sc} wrong={wr} />
       );
     }
 
@@ -128,6 +124,7 @@ export default function Matrix() {
     console.log(op);
     let i = active.i;
     let j = active.j;
+    console.log(op);
     if (op in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]) {
       setEnter(true);
       handleCell(active.i, active.j, parseInt(op));
@@ -174,6 +171,11 @@ export default function Matrix() {
     }
   };
 
+  const onButton = (v) => {
+    if (v == 0) keyDown("c");
+    else keyDown(v + "");
+  };
+
   const a = [1, 2, 3];
 
   return (
@@ -192,19 +194,19 @@ export default function Matrix() {
 
         {mat.map((row, idx) => {
           return (
-            <div key={idx} className="rowp">
-              <Row
-                row={row}
-                rowIdx={idx}
-                active={active}
-                or={or}
-                handleBox={handleCell}
-              ></Row>
-            </div>
+            <Row
+              key={idx}
+              row={row}
+              rowIdx={idx}
+              active={active}
+              or={or}
+              handleBox={handleCell}
+            ></Row>
           );
         })}
+        <div className="footer">{footer}</div>
       </div>
-      <div>{footer}</div>
+      <Numpad onButton={onButton} />
     </>
   );
 }

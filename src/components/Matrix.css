@@ -1,11 +1,42 @@
+
+:root{
+    --mheight:432px;
+    --footer-width:calc(var(--mheight)*(0.20));
+    --footer-height:var(--mheight);
+    --mwidth: calc(var(--mheight) + var(--mheight)*(0.20));
+
+    --cell-margin-left-right:4px;
+    --row-margin-top-bottom:4px;
+
+    --rwidth:var(--mheight);
+    --rheight:calc((var(--mheight) - 18*(var(--cell-margin-left-right)))/9);
+    --cell-width:var(--rheight);
+    --cell-height:var(--rheight);
+    --vb-width:calc(var(--cell-margin-left-right)*6 + 2px + var(--cell-width)*3);
+    --vb-height:calc(var(--mheight)/3 + 1px);
+    --vb-left: calc(var(--cell-width)*3 + var(--cell-margin-left-right)*6 - 1px);
+    --hb-width: var(--rwidth);
+    --hb-height: calc(var(--mheight)/3 - 1px);
+    --hb-top1: calc(var(--hb-height) + 1px);
+    --hb-top2: calc(var(--hb-height)*2);
+}
+@media screen and (max-width: 500px) {
+  :root{
+    --mheight:300px;
+  }
+}
+
+
+
 .matrix{
     background-color: transparent;
-    margin-top: 30px;
-    height: 415px;
-    width: 405px;
+    margin-top: 20px;
+    height: var(--mheight);
+    width: calc(var(--mwidth));
     margin-left: auto;
     margin-right: auto;
     display: flex;
+    position: relative;
     flex-direction: column;
     overflow: hidden;
     
@@ -16,33 +47,25 @@
 }
 
 .row{
-    height: 42px;
-    width: 400px;
+    height: var(--rheight);
+    width: var(--rwidth);
     background-color: transparent;
     display: flex;
     position: relative;
     flex-direction: row;
-    margin-bottom: 3px;
-    left: 2px;
+    margin-top: var(--row-margin-top-bottom);
+    margin-bottom: var(--row-margin-top-bottom);
 }
-.rowp{
-    height: 42px;
-    width: 400px;
-    background-color: transparent;
-    display: flex;
-    position: relative;
-    flex-direction: row;
-    margin-top: 4px;
-}
+
 .cell{
-    width: 40px;
-    height: 40px;
+    width: var(--cell-width);
+    height: var(--cell-height);
     font-family: Arial, Helvetica, sans-serif;
     font-size: 22px;
     background-color: rgb(161, 217, 214);
     border-radius: 5px;
-    margin-left: 0px;
-    margin-right: 7px;
+    margin-left: var(--cell-margin-left-right);
+    margin-right: var(--cell-margin-left-right);
     position: relative;
     display: flex;
     justify-content: center;
@@ -66,26 +89,26 @@
 }
 
 .cube1{
-    width: 130px;
-    height: 138px;
+    width: var(--vb-width);
+    height: var(--vb-height);
+    box-sizing: border-box;
     position: absolute;
     background-color: transparent;
-    
-    
 }
 .cube2{
-    width: 131px;
-    height: 141px;
+    width: var(--vb-width);
+    height: var(--vb-height);
+    box-sizing: border-box;
     position: absolute;
     background-color: transparent;
     border-left: 2px solid rgb(133, 132, 132);
     border-right: 2px solid rgb(133, 132, 132);
-    top: 0px;
-    left: 131px;
+    left: var(--vb-left);
 }
 .cube3{
-    width: 132px;
-    height: 138px;
+    width: var(--vb-width);
+    height: var(--vb-height);
+    box-sizing: border-box;
     position: absolute;
     background-color: transparent;
     left: 264px;
@@ -93,56 +116,60 @@
 .cuberow1{
     
     position: absolute;
-    width: 397px;
-    height: 138px;
+    width: var(--hb-width);
+    height: var(--hb-height);
     border-bottom: 2px solid rgb(133, 132, 132);
     
 }
 .cuberow2{
     position: absolute;
-    width: 397px;
-    height: 137px;
+    width: var(--hb-width);
+    height: var(--hb-height);
     border-bottom: 2px solid rgb(133, 132, 132);
-    top: 229px;
+    top: var(--hb-top1);
 }
 .cuberow3{
     position: absolute;
-    width: 397px;
-    height: 138px;
-    top: 365px;
+    width: var(--hb-width);
+    height: var(--hb-height);
+    top: var(--hb-top2);
 }
 
 .footer{
-    width: 400px;
-    height: 40px;
-    margin: 10px;
+    width: var(--footer-width);
+    height: var(--footer-height);
     
-    margin-left: auto;
-    margin-right: auto;
+    background-color: transparent;
     display: flex;
+    
     justify-items: center;
     align-items: center;
-    position: relative;
+    position: absolute;
+    
+    right: 0px;
 }
 .incorrect{
     height: 35px;
-    width: 80px;
+    width: 80%;
     position: absolute;
-    right: 5px;
+    left: 10px;
+    top: 25%;
     font-family: Arial, Helvetica, sans-serif;
     font-size: larger;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 8px;
+    
     color: aliceblue;
     background-color: rgb(198, 96, 96);
 }
 .score{
     height: 35px;
-    width: 80px;
+    width: 80%;
     position: absolute;
-    left: 5px;
+    left: 10px;
+    top: 10%;
     font-family: Arial, Helvetica, sans-serif;
     font-size: larger;
     display: flex;
@@ -153,7 +180,7 @@
     background-color: rgb(35, 161, 35);
 }
 .output{
-    width: 150px;
+    width: 80%;
     height: 38px;
     border-radius: 20px;
     font-family: Arial, Helvetica, sans-serif;
@@ -163,12 +190,42 @@
     justify-content: center;
     margin-left: auto;
     margin-right: auto;
-    color: white;
+    color: rgb(251, 248, 248);
 }
 .correct{
     background-color: green;
 }
 .wrong{
-    
     background-color: rgb(196, 17, 17);
+}
+
+.numpad{
+    position: relative;
+    margin-top: 10px;
+    width: var(--mwidth);
+    height: var(--cell-height);
+    background-color: transparent;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+}
+.number{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc((var(--mheight) - 20*4px)/10);
+    height: 100%;
+    margin-left: var(--cell-margin-left-right);
+    margin-right: var(--cell-margin-left-right);
+    background-color: rgb(10, 144, 99);
+    border-radius: 8px;
+    color: aliceblue;
+}
+.X{
+    background-color: rgb(181, 27, 27);
+}
+.number:active{
+    transform: translateY(-4px);
+    background-color: rgb(146, 146, 215);
 }
