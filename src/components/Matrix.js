@@ -13,8 +13,8 @@ function game(fullsud) {
   for (let i = 0; i < 9; i++) {
     sud[i] = new Array(9).fill(-1);
   }
-  let c = 0;
-  while (c < 51) {
+  let c = solvemulsol(sud, fullsud);
+  while (c < 50) {
     let i = Math.floor(Math.random() * 10);
     let j = Math.floor(Math.random() * 10);
     if (i === 9 || j === 9) {
@@ -26,6 +26,35 @@ function game(fullsud) {
     }
   }
   return sud;
+}
+
+function solvemulsol(sud, fsud) {
+  let c = 0;
+  for (let i = 0; i < 9; i++) {
+    for (let j = i + 1; j < 9; j++) {
+      for (let k = 0; k < 9; k++) {
+        for (let l = k + 1; l < 9; l++) {
+          if (fsud[i][k] === fsud[j][k] && fsud[i][l] === fsud[j][l]) {
+            sud[i][k] = fsud[i][k];
+            c++;
+          }
+        }
+      }
+    }
+  }
+  for (let i = 0; i < 9; i++) {
+    for (let j = i + 1; j < 9; j++) {
+      for (let k = 0; k < 9; k++) {
+        for (let l = k + 1; l < 9; l++) {
+          if (fsud[k][i] === fsud[k][j] && fsud[l][i] === fsud[l][j]) {
+            sud[k][i] = fsud[k][i];
+            c++;
+          }
+        }
+      }
+    }
+  }
+  return c;
 }
 
 export default function Matrix() {
@@ -163,7 +192,7 @@ export default function Matrix() {
     } else if (op === "Enter") {
       onSubmit(enter);
       setEnter(false);
-    } else if ((mat[i][j] != -1 && op === "c") || op === "C") {
+    } else if ((mat[i][j] !== -1 && op === "c") || op === "C") {
       setState(false);
       setEnter(true);
 
@@ -172,7 +201,7 @@ export default function Matrix() {
   };
 
   const onButton = (v) => {
-    if (v == 0) keyDown("c");
+    if (v === 0) keyDown("c");
     else keyDown(v + "");
   };
 

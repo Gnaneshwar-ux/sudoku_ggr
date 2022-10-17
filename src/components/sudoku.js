@@ -6,7 +6,6 @@ export default function generateSudoku() {
   while (!validate(sud)) {
     sud = develop();
   }
-
   return sud;
 }
 
