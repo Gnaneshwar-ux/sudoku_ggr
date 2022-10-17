@@ -22,7 +22,7 @@
 }
 @media screen and (max-width: 500px) {
   :root{
-    --mheight:300px;
+    --mheight:350px;
   }
 }
 
@@ -145,7 +145,8 @@
     justify-items: center;
     align-items: center;
     position: absolute;
-    
+    display: flex;
+
     right: 0px;
 }
 .incorrect{
@@ -214,13 +215,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc((var(--mheight) - 20*4px)/10);
+    width: calc(68%/10);
     height: 100%;
     margin-left: var(--cell-margin-left-right);
     margin-right: var(--cell-margin-left-right);
     background-color: rgb(10, 144, 99);
     border-radius: 8px;
     color: aliceblue;
+}
+@media screen and (max-width: 500px) {
+    .number{
+        width: calc(100%/10);
+    }
 }
 .X{
     background-color: rgb(181, 27, 27);
