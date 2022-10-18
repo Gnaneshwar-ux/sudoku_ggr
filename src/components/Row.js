@@ -10,14 +10,17 @@ export default function Row(props) {
   };
   const getCls = (i, j, val) => {
     var cls = "cell";
-    if (props.or[i][j] !== -1) {
+
+    if (props.or[i][j] !== -1 && props.or[i][j] != 0) {
       return cls + " original";
     }
+
     if (props.active.i === props.rowIdx && j === props.active.j) {
       cls += " active";
     }
-    if (val !== -1) {
-      cls += " update";
+
+    if (props.or[i][j] === 0) {
+      cls = cls + " error";
     }
     return cls;
   };

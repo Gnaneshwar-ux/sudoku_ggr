@@ -13,12 +13,12 @@ function game(fullsud) {
     sud[i] = new Array(9).fill(-1);
   }
 
-  print(sud);
+  //print(sud);
 
   let c = solvemulsol(sud, fullsud);
 
-  print(sud);
-  print(fullsud);
+  // print(sud);
+  // print(fullsud);
 
   while (c < 40) {
     let i = Math.floor(Math.random() * 10);
@@ -100,9 +100,6 @@ export default function Matrix() {
         sc += 1;
         setScore(sc);
       }
-      setFooter(
-        <Footer cls={"output correct"} output={"✓"} score={sc} wrong={wr} />
-      );
     } else {
       if (isEnter) {
         wr += 1;
@@ -110,14 +107,9 @@ export default function Matrix() {
         setWrong(wr);
         setScore(sc);
       }
-      setFooter(
-        <Footer cls={"output wrong"} output={"X"} score={sc} wrong={wr} />
-      );
     }
 
-    setTimeout(() => {
-      setFooter(<Footer score={sc} wrong={wr} />);
-    }, 500);
+    setFooter(<Footer score={sc} wrong={wr} />);
   };
 
   const autofocus = useRef();
@@ -138,6 +130,8 @@ export default function Matrix() {
 
   const [footer, setFooter] = useState(<Footer score={score} wrong={wrong} />);
 
+  const [filled, setFilled] = useState(0);
+
   useEffect(() => {
     autofocus.current.focus();
   }, []);
@@ -150,34 +144,51 @@ export default function Matrix() {
   const [active, SetActive] = useState({ i: 0, j: 0 });
 
   const verify = (temp, original) => {
+    let lat = [[], [], [], [], [], [], [], [], []];
+    print(or);
+    let flag = true;
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
         if (temp[i][j] !== -1 && temp[i][j] !== original[i][j]) {
-          console.log(temp[i][j] + " " + original[i][j]);
-          return false;
+          flag = false;
         }
+        lat[i][j] = or[i][j];
       }
     }
-
+    if (!flag) {
+      lat[active.i][active.j] = 0;
+      setOr(lat);
+      return false;
+    }
+    let x = filled;
+    lat[active.i][active.j] = original[active.i][active.j];
+    setFilled(x + 1);
+    setOr(lat);
     return true;
   };
 
   const handleCell = (i, j, val) => {
     //console.log("handleCell invoked");
-    if (or[i][j] !== -1) {
+    if (or[i][j] > 0) {
       console.log("invalid");
       return;
     }
-    if (val === undefined) {
+    if (val === undefined || val === 0) {
       SetActive({ i: i, j: j });
       return;
     }
     if (mat[i][j] === val) return;
     var temp = [[], [], [], [], [], [], [], [], []];
+    var tor = [[], [], [], [], [], [], [], [], []];
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
         temp[i][j] = mat[i][j];
+        tor[i][j] = or[i][j];
       }
+    }
+    if (val === -1) {
+      tor[i][j] = -1;
+      setOr(tor);
     }
     temp[i][j] = val;
     setMat(temp);
@@ -229,7 +240,6 @@ export default function Matrix() {
     } else if ((mat[i][j] !== -1 && op === "c") || op === "C") {
       setState(false);
       setEnter(true);
-
       handleCell(active.i, active.j, -1);
     }
   };
