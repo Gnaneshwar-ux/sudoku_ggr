@@ -1,206 +1,140 @@
 import React, { useEffect, useState, useRef } from "react";
+
 import "./Matrix.css";
+
 import Row from "./Row";
+
 import generateSudoku from "./sudoku";
+
 import validate from "./validate";
+
 import Cuberow from "./cuberow";
+
 import Footer from "./Footer";
+
 import Numpad from "./Numpad";
 
-function game(fullsud) {
-  let sud = new Array(9);
-  for (let i = 0; i < 9; i++) {
-    sud[i] = new Array(9).fill(-1);
-  }
+import Game from "./Game";
 
-  //print(sud);
-
-  let c = solvemulsol(sud, fullsud);
-
-  // print(sud);
-  // print(fullsud);
-
-  while (c < 40) {
-    let i = Math.floor(Math.random() * 10);
-    let j = Math.floor(Math.random() * 10);
-    if (i === 9 || j === 9) {
-      continue;
-    }
-    if (sud[i][j] === -1) {
-      sud[i][j] = fullsud[i][j];
-      c++;
-    }
-  }
-  return sud;
-}
-
-function print(sud) {
-  let s = "";
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      s += sud[i][j] + " ";
-    }
-    s += "\n";
-  }
-  console.log(s);
-}
-
-function solvemulsol(sud, fsud) {
-  let c = 0;
-
-  for (let k = 0; k < 9; k += 3) {
-    for (let i = k; i < k + 3; i++) {
-      for (let j = i + 1; j < k + 3; j++) {
-        for (let x = 0; x < 6; x++) {
-          let l = Math.floor(x / 3) * 3 + 3;
-          for (let y = l; y < 9; y++) {
-            if (
-              sud[i][x] === -1 &&
-              fsud[i][x] === fsud[j][y] &&
-              fsud[i][y] === fsud[j][x]
-            ) {
-              sud[i][x] = fsud[i][x];
-              c++;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  for (let k = 0; k < 9; k += 3) {
-    for (let i = k; i < k + 3; i++) {
-      for (let j = i + 1; j < k + 3; j++) {
-        for (let x = 0; x < 6; x++) {
-          let l = Math.floor(x / 3) * 3 + 3;
-          for (let y = l; y < 9; y++) {
-            if (
-              sud[x][i] === -1 &&
-              fsud[x][i] === fsud[y][j] &&
-              fsud[y][i] === fsud[x][j]
-            ) {
-              sud[x][i] = fsud[x][i];
-              c++;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return c;
-}
-
-export default function Matrix() {
-  const onSubmit = (isEnter) => {
-    let sc = score;
-    let wr = wrong;
-    if (verify(mat, original)) {
-      if (isEnter) {
-        sc += 1;
-        setScore(sc);
-      }
-    } else {
-      if (isEnter) {
-        wr += 1;
-        sc -= 0.5;
-        setWrong(wr);
-        setScore(sc);
-      }
-    }
-
-    setFooter(<Footer score={sc} wrong={wr} />);
-  };
-
+export default function Matrix(props) {
   const autofocus = useRef();
 
-  const [original, SetOriginal] = useState(generateSudoku());
   //console.log(original);
-  const [enter, setEnter] = useState(false);
+  const [original, setOriginal] = useState();
+
+  const [state, setState] = useState(true);
 
   const [wrong, setWrong] = useState(0);
 
-  const [mat, setMat] = useState(game(original));
-
-  const [or, setOr] = useState(mat);
-
-  const [state, setState] = useState(false);
-
-  const [score, setScore] = useState(0);
-
-  const [footer, setFooter] = useState(<Footer score={score} wrong={wrong} />);
-
   const [filled, setFilled] = useState(0);
 
-  useEffect(() => {
-    autofocus.current.focus();
-  }, []);
+  const [mat, setMat] = useState([]);
+
+  const [active, setActive] = useState();
+
+  const [or, setOr] = useState([]);
+  if (props.mstate) {
+    setState(true);
+  }
+
+  if (state && props.state) {
+    setState(false);
+    setOriginal(props.original);
+    setWrong(0);
+    setFilled(props.level);
+    setMat(props.game);
+    setActive({ i: 0, j: 0 });
+    setOr(
+      props.game.map((i) =>
+        i.map((j) => {
+          if (j > 0) {
+            return 1;
+          }
+          return 0;
+        })
+      )
+    );
+    console.log(original);
+    console.log(props.game);
+  }
+  console.log(props.original);
 
   useEffect(() => {
-    if (state) onSubmit(enter);
-    if (!state) setState(true);
-  }, [mat]);
+    if (filled == 81) {
+      setState(true);
+      props.onComplete(wrong);
+    }
+  }, [filled]);
 
-  const [active, SetActive] = useState({ i: 0, j: 0 });
+  useEffect(() => {
+    if (wrong == props.limit) {
+      props.onWrong();
+    }
+  }, [wrong]);
 
-  const verify = (temp, original) => {
-    let lat = [[], [], [], [], [], [], [], [], []];
-    print(or);
-    let flag = true;
+  const getTemp = (arr) => {
+    let temp = new Array(9);
+
+    for (let i = 0; i < 9; i++) {
+      temp[i] = new Array(9).fill(-1);
+    }
+
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
-        if (temp[i][j] !== -1 && temp[i][j] !== original[i][j]) {
-          flag = false;
-        }
-        lat[i][j] = or[i][j];
+        temp[i][j] = arr[i][j];
       }
     }
-    if (!flag) {
-      lat[active.i][active.j] = 0;
-      setOr(lat);
-      return false;
-    }
-    let x = filled;
-    lat[active.i][active.j] = original[active.i][active.j];
-    setFilled(x + 1);
-    setOr(lat);
-    return true;
+    return temp;
+  };
+
+  const verify = (i, j, val) => {
+    if (original[i][j] == val) return true;
+    return false;
   };
 
   const handleCell = (i, j, val) => {
-    //console.log("handleCell invoked");
     if (or[i][j] > 0) {
-      console.log("invalid");
       return;
     }
-    if (val === undefined || val === 0) {
-      SetActive({ i: i, j: j });
+
+    if (val === undefined) {
+      setActive({ i: i, j: j });
       return;
     }
+
     if (mat[i][j] === val) return;
-    var temp = [[], [], [], [], [], [], [], [], []];
-    var tor = [[], [], [], [], [], [], [], [], []];
-    for (let i = 0; i < 9; i++) {
-      for (let j = 0; j < 9; j++) {
-        temp[i][j] = mat[i][j];
-        tor[i][j] = or[i][j];
-      }
-    }
-    if (val === -1) {
-      tor[i][j] = -1;
-      setOr(tor);
-    }
+
+    var temp = getTemp(mat);
+
     temp[i][j] = val;
+
+    let ortemp = getTemp(or);
+    let pfilled = filled;
+    let wr = wrong;
+
+    if (!verify(i, j, val)) {
+      ortemp[i][j] = -1;
+      if (val === 0) {
+        ortemp[i][j] = 0;
+      } else {
+        wr++;
+      }
+    } else {
+      pfilled += 1;
+      ortemp[i][j] = 1;
+    }
+
+    setOr(ortemp);
     setMat(temp);
+    setWrong(wr);
+    setFilled(pfilled);
   };
 
   const keyDown = (op) => {
-    console.log(op);
     let i = active.i;
     let j = active.j;
-    console.log(op);
-    if (op in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]) {
-      setEnter(true);
+
+    if (parseInt(op) >= 1) {
       handleCell(active.i, active.j, parseInt(op));
     } else if (op === "ArrowDown" && i < 8) {
       i++;
@@ -209,7 +143,7 @@ export default function Matrix() {
       }
       if (i === 9) i = active.i;
 
-      SetActive({ i: i, j: j });
+      setActive({ i: i, j: j });
     } else if (op === "ArrowUp" && i > 0) {
       i--;
       while (or[i][j] !== -1 && i > -1) {
@@ -217,7 +151,7 @@ export default function Matrix() {
       }
       if (i === -1) i = active.i;
 
-      SetActive({ i: i, j: j });
+      setActive({ i: i, j: j });
     } else if (op === "ArrowLeft" && j > 0) {
       j--;
       while (or[i][j] !== -1 && j > -1) {
@@ -225,7 +159,7 @@ export default function Matrix() {
       }
       if (j === -1) j = active.j;
 
-      SetActive({ i: i, j: j });
+      setActive({ i: i, j: j });
     } else if (op === "ArrowRight" && j < 8) {
       j++;
       while (or[i][j] !== -1 && j < 9) {
@@ -233,14 +167,9 @@ export default function Matrix() {
       }
       if (j === 9) j = active.j;
 
-      SetActive({ i: i, j: j });
-    } else if (op === "Enter") {
-      onSubmit(enter);
-      setEnter(false);
+      setActive({ i: i, j: j });
     } else if ((mat[i][j] !== -1 && op === "c") || op === "C") {
-      setState(false);
-      setEnter(true);
-      handleCell(active.i, active.j, -1);
+      handleCell(active.i, active.j, 0);
     }
   };
 
@@ -248,8 +177,6 @@ export default function Matrix() {
     if (v === 0) keyDown("c");
     else keyDown(v + "");
   };
-
-  const a = [1, 2, 3];
 
   return (
     <>
@@ -259,7 +186,7 @@ export default function Matrix() {
         tabIndex={0}
         ref={autofocus}
       >
-        {a.map((i) => (
+        {[1, 2, 3].map((i) => (
           <div key={i} className={"cuberow" + i}>
             <Cuberow />
           </div>
@@ -277,7 +204,9 @@ export default function Matrix() {
             ></Row>
           );
         })}
-        <div className="footer">{footer}</div>
+        <div className="footer">
+          <Footer wrong={wrong} />
+        </div>
       </div>
       <Numpad onButton={onButton} />
     </>

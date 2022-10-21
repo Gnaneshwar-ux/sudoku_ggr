@@ -2,25 +2,22 @@ import React from "react";
 
 export default function Row(props) {
   const get = (j) => {
-    if (j != -1) {
+    if (j > 0) {
       return j;
     } else {
       return;
     }
   };
-  const getCls = (i, j, val) => {
-    var cls = "cell";
-
-    if (props.or[i][j] !== -1 && props.or[i][j] != 0) {
-      return cls + " original";
+  const getCls = (i, j) => {
+    let cls = "cell";
+    if (props.or[i][j] === -1) {
+      cls = "cell error";
     }
-
-    if (props.active.i === props.rowIdx && j === props.active.j) {
+    if (i === props.active.i && j === props.active.j) {
       cls += " active";
     }
-
-    if (props.or[i][j] === 0) {
-      cls = cls + " error";
+    if (props.or[i][j] === 1) {
+      return "cell original";
     }
     return cls;
   };
@@ -30,7 +27,7 @@ export default function Row(props) {
         return (
           <div
             key={idx}
-            className={getCls(props.rowIdx, idx, j)}
+            className={getCls(props.rowIdx, idx)}
             onClick={() => props.handleBox(props.rowIdx, idx)}
           >
             {get(j)}
